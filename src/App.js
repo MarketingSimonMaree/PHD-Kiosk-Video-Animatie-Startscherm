@@ -48,10 +48,10 @@ const App = () => {
   const handleClick = () => {
     // Aangepaste kiosk navigatie
     if (window.kiosk) {
-      window.kiosk.full("https://9q56hk.csb.app/");
+      window.kiosk.full("https://phd-kiosk-scherm-2-quiz.vercel.app/");
     } else {
       // Fallback voor testen buiten kiosk
-      window.location.href = "https://9q56hk.csb.app/";
+      window.location.href = "https://phd-kiosk-scherm-2-quiz.vercel.app/";
     }
   };
 
