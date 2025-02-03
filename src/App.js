@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 const App = () => {
   const [position, setPosition] = useState({ x: 50, y: 50 });
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef(null);
 
   const startVideo = async () => {
@@ -46,11 +47,9 @@ const App = () => {
   }, []);
 
   const handleClick = () => {
-    // Aangepaste kiosk navigatie
     if (window.kiosk) {
       window.kiosk.full("https://phd-kiosk-scherm-2-quiz.vercel.app/");
     } else {
-      // Fallback voor testen buiten kiosk
       window.location.href = "https://phd-kiosk-scherm-2-quiz.vercel.app/";
     }
   };
@@ -70,16 +69,33 @@ const App = () => {
         touchAction: "none",
       }}
     >
-      <video
-        ref={videoRef}
-        playsInline
-        loop
-        preload="auto"
+      {/* Preload image */}
+      <img
+        src="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Start_Scherm_Intro_3.jpg?v=1738083124"
+        alt="Video thumbnail"
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
           objectFit: "cover",
+          opacity: videoLoaded ? 0 : 1,
+          transition: "opacity 0.5s ease"
+        }}
+      />
+
+      <video
+        ref={videoRef}
+        playsInline
+        loop
+        preload="auto"
+        onLoadedData={() => setVideoLoaded(true)}
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: videoLoaded ? 1 : 0,
+          transition: "opacity 0.5s ease"
         }}
       >
         <source
