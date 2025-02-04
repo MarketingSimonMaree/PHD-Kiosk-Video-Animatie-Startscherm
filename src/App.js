@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 
 const App = () => {
   const [position, setPosition] = useState({ x: 50, y: 50 });
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef(null);
 
   const startVideo = async () => {
@@ -26,7 +25,7 @@ const App = () => {
 
   useEffect(() => {
     startVideo();
-
+    
     const videoCheck = setInterval(() => {
       if (videoRef.current && videoRef.current.paused) {
         startVideo();
@@ -69,33 +68,17 @@ const App = () => {
         touchAction: "none",
       }}
     >
-      {/* Preload image */}
-      <img
-        src="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Start_Scherm_Intro_3.jpg?v=1738083124"
-        alt="Video thumbnail"
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: videoLoaded ? 0 : 1,
-          transition: "opacity 0.5s ease"
-        }}
-      />
-
       <video
         ref={videoRef}
         playsInline
         loop
         preload="auto"
-        onLoadedData={() => setVideoLoaded(true)}
+        poster="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Start_Scherm_Intro_3.jpg?v=1738083124"
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
-          objectFit: "cover",
-          opacity: videoLoaded ? 1 : 0,
-          transition: "opacity 0.5s ease"
+          objectFit: "cover"
         }}
       >
         <source
@@ -104,13 +87,7 @@ const App = () => {
         />
       </video>
 
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
-        }}
-      >
+      <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0, 0, 0, 0.3)" }}>
         <div
           style={{
             position: "absolute",
