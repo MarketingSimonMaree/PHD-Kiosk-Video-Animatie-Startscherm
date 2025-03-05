@@ -6,10 +6,9 @@ const App = () => {
   const [loopCount, setLoopCount] = useState(0);
   const videoRef = useRef(null);
 
-  // Audio patroon configuratie
-  const audioLoops = 4;    // Aantal loops met audio
-  const muteLoops = 10;    // Aantal loops zonder audio
-  const totalPattern = audioLoops + muteLoops;
+// Audio patroon configuratie
+const audioTime = 7900;  // 8 seconden aan is 1 keer de video
+const muteTime = 17000;   // 17 seconden uit
 
   // Start video
   const startVideo = async () => {
@@ -43,13 +42,35 @@ const App = () => {
   };
 
   useEffect(() => {
-    startVideo();
-    
-    const videoCheck = setInterval(() => {
-      if (videoRef.current && videoRef.current.paused) {
-        startVideo();
-      }
-    }, 1000);
+    // Start video met geluid aan
+    if (videoRef.current) {
+      videoRef.current.play();
+      videoRef.current.muted = false;
+    }
+
+    // Functie om de audio cyclus te starten
+    const startAudioCycle = () => {
+      // Zet op mute na audioTime
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+          setAudioEnabled(false);
+
+          // Zet geluid weer aan na muteTime
+          setTimeout(() => {
+            if (videoRef.current) {
+              videoRef.current.muted = false;
+              setAudioEnabled(true);
+              // Start de cyclus opnieuw
+              startAudioCycle();
+            }
+          }, muteTime);
+        }
+      }, audioTime);
+    };
+
+    // Start de eerste cyclus
+    startAudioCycle();
 
     const positionInterval = setInterval(() => {
       setPosition({
@@ -60,7 +81,6 @@ const App = () => {
 
     return () => {
       clearInterval(positionInterval);
-      clearInterval(videoCheck);
     };
   }, []);
 
