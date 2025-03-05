@@ -2,13 +2,21 @@ import React, { useState, useEffect, useRef } from "react";
 
 const App = () => {
   const [position, setPosition] = useState({ x: 50, y: 50 });
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [loopCount, setLoopCount] = useState(0);
   const videoRef = useRef(null);
 
+  // Audio patroon configuratie
+  const audioLoops = 4;    // Aantal loops met audio
+  const muteLoops = 10;    // Aantal loops zonder audio
+  const totalPattern = audioLoops + muteLoops;
+
+  // Start video
   const startVideo = async () => {
     if (videoRef.current) {
       try {
         document.documentElement.dispatchEvent(new MouseEvent("click"));
-        videoRef.current.muted = false;
+        videoRef.current.muted = !audioEnabled;
         videoRef.current.volume = 1;
         await videoRef.current.play();
 
@@ -21,6 +29,17 @@ const App = () => {
         console.error("Video start failed:", err);
       }
     }
+  };
+
+  // Bijhouden van video loops
+  const handleVideoEnd = () => {
+    // Verhoog de loopcounter
+    const newLoopCount = (loopCount + 1) % totalPattern;
+    setLoopCount(newLoopCount);
+    
+    // Bepaal of audio aan of uit moet
+    const shouldEnableAudio = newLoopCount < audioLoops;
+    setAudioEnabled(shouldEnableAudio);
   };
 
   useEffect(() => {
@@ -44,6 +63,13 @@ const App = () => {
       clearInterval(videoCheck);
     };
   }, []);
+
+  // Update video muted status wanneer audioEnabled verandert
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = !audioEnabled;
+    }
+  }, [audioEnabled]);
 
   const handleClick = () => {
     if (window.kiosk) {
@@ -73,6 +99,7 @@ const App = () => {
         playsInline
         loop
         preload="auto"
+        onEnded={handleVideoEnd}
         poster="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Start_Scherm_Intro_3.jpg?v=1738083124"
         style={{
           position: "absolute",
