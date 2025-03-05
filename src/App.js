@@ -5,72 +5,45 @@ const App = () => {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [loopCount, setLoopCount] = useState(0);
   const videoRef = useRef(null);
+  const lastTimeRef = useRef(0);
 
-// Audio patroon configuratie
-const audioTime = 7900;  // 8 seconden aan is 1 keer de video
-const muteTime = 17000;   // 17 seconden uit
+  // Video loop patroon configuratie
+  const audioLoops = 1;    // Aantal loops met geluid aan
+  const muteLoops = 3;     // Aantal loops met geluid uit
+  const totalPattern = audioLoops + muteLoops;
 
   // Start video
   const startVideo = async () => {
     if (videoRef.current) {
       try {
-        document.documentElement.dispatchEvent(new MouseEvent("click"));
         videoRef.current.muted = !audioEnabled;
         videoRef.current.volume = 1;
         await videoRef.current.play();
-
-        setTimeout(() => {
-          if (videoRef.current && videoRef.current.paused) {
-            videoRef.current.play();
-          }
-        }, 100);
       } catch (err) {
         console.error("Video start failed:", err);
       }
     }
   };
 
-  // Bijhouden van video loops
-  const handleVideoEnd = () => {
-    // Verhoog de loopcounter
-    const newLoopCount = (loopCount + 1) % totalPattern;
-    setLoopCount(newLoopCount);
-    
-    // Bepaal of audio aan of uit moet
-    const shouldEnableAudio = newLoopCount < audioLoops;
-    setAudioEnabled(shouldEnableAudio);
+  // Check voor video loop
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const currentTime = videoRef.current.currentTime;
+      if (currentTime < lastTimeRef.current) {
+        // Video is geloopt
+        const newLoopCount = (loopCount + 1) % totalPattern;
+        setLoopCount(newLoopCount);
+        
+        // Bepaal of audio aan of uit moet
+        const shouldEnableAudio = newLoopCount < audioLoops;
+        setAudioEnabled(shouldEnableAudio);
+      }
+      lastTimeRef.current = currentTime;
+    }
   };
 
   useEffect(() => {
-    // Start video met geluid aan
-    if (videoRef.current) {
-      videoRef.current.play();
-      videoRef.current.muted = false;
-    }
-
-    // Functie om de audio cyclus te starten
-    const startAudioCycle = () => {
-      // Zet op mute na audioTime
-      setTimeout(() => {
-        if (videoRef.current) {
-          videoRef.current.muted = true;
-          setAudioEnabled(false);
-
-          // Zet geluid weer aan na muteTime
-          setTimeout(() => {
-            if (videoRef.current) {
-              videoRef.current.muted = false;
-              setAudioEnabled(true);
-              // Start de cyclus opnieuw
-              startAudioCycle();
-            }
-          }, muteTime);
-        }
-      }, audioTime);
-    };
-
-    // Start de eerste cyclus
-    startAudioCycle();
+    startVideo();
 
     const positionInterval = setInterval(() => {
       setPosition({
@@ -119,7 +92,7 @@ const muteTime = 17000;   // 17 seconden uit
         playsInline
         loop
         preload="auto"
-        onEnded={handleVideoEnd}
+        onTimeUpdate={handleTimeUpdate}
         poster="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Start_Scherm_Intro_3.jpg?v=1738083124"
         style={{
           position: "absolute",
