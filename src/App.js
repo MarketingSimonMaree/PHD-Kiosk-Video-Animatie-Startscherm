@@ -93,7 +93,7 @@ const App = () => {
         loop
         preload="auto"
         onTimeUpdate={handleTimeUpdate}
-        poster="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Start_Scherm_Intro_3.jpg?v=1738083124"
+        poster="https://cdn.shopify.com/s/files/1/0524/8794/6424/files/Scherm-Video-Anymatie-Compress-Thumb-2.jpg?v=1741350164"
         style={{
           position: "absolute",
           width: "100%",
