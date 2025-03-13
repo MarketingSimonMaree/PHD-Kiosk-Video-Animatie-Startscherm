@@ -102,7 +102,7 @@ const App = () => {
         }}
       >
         <source
-          src="https://cdn.shopify.com/videos/c/o/v/d81e39eccf44498ca273898c56d580fb.mp4"
+          src="https://cdn.shopify.com/videos/c/o/v/ab592dbfafb2471eb0dbd31e6f99ca5f.mp4"
           type="video/mp4"
         />
       </video>
