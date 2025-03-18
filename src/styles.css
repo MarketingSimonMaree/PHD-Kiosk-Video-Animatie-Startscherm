@@ -1,4 +1,17 @@
+* {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
