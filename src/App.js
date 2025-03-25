@@ -16,7 +16,7 @@ const App = () => {
   const startVideo = async () => {
     if (videoRef.current) {
       try {
-        videoRef.current.muted = !audioEnabled;
+        videoRef.current.muted = !audioDisabled;
         videoRef.current.volume = 1;
         await videoRef.current.play();
       } catch (err) {
