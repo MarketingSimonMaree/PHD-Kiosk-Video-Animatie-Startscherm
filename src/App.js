@@ -8,7 +8,7 @@ const App = () => {
   const lastTimeRef = useRef(0);
 
   // Video loop patroon configuratie
-  const audioLoops = 1;    // Aantal loops met geluid aan
+  const audioLoops = 0;    // Aantal loops met geluid aan
   const muteLoops = 3;     // Aantal loops met geluid uit
   const totalPattern = audioLoops + muteLoops;
 
