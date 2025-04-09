@@ -8,7 +8,7 @@ const App = () => {
   const lastTimeRef = useRef(0);
 
   // Video loop patroon configuratie
-  const audioLoops = 0;    // Aantal loops met geluid aan
+  const audioLoops = 1;    // Aantal loops met geluid aan
   const muteLoops = 3;     // Aantal loops met geluid uit
   const totalPattern = audioLoops + muteLoops;
 
@@ -17,7 +17,7 @@ const App = () => {
     if (videoRef.current) {
       try {
         videoRef.current.muted = !audioEnabled;
-        videoRef.current.volume = 0;
+        videoRef.current.volume = 1;
         await videoRef.current.play();
       } catch (err) {
         console.error("Video start failed:", err);
